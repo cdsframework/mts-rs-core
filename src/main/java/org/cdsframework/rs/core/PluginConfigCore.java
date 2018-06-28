@@ -28,6 +28,11 @@ package org.cdsframework.rs.core;
 
 import org.cdsframework.rs.core.support.CatResourceConfig;
 import org.cdsframework.dto.AppDTO;
+import org.cdsframework.dto.NotificationDTO;
+import org.cdsframework.dto.NotificationLogDTO;
+import org.cdsframework.dto.NotificationRecipientDTO;
+import org.cdsframework.dto.NotificationReleaseNoteDTO;
+import org.cdsframework.dto.NotificationStateDTO;
 import org.cdsframework.dto.SecurityPermissionDTO;
 import org.cdsframework.dto.SecuritySchemeDTO;
 import org.cdsframework.dto.SecuritySchemeRelMapDTO;
@@ -156,6 +161,61 @@ public class PluginConfigCore extends BasePluginConfig {
                 logger.info(METHODNAME);
                 addDataTableColumn("relatedSecuritySchemeDTO.schemeName");
                 addDataTableColumn("relatedSecuritySchemeDTO.description");
+            }
+        });
+
+        registerConfig(NotificationDTO.class, new CatResourceConfig(NotificationDTO.class) {
+            @Override
+            public void initialize() {
+                final String METHODNAME = "NotificationDTO initialize ";
+                logger.info(METHODNAME);
+                addDataTableColumn("displayId");
+                addDataTableColumn("name");
+                addDataTableColumn("status");
+                addDataTableColumn("lastModDatetime", "Last Modified");
+            }
+        });
+
+        registerConfig(NotificationRecipientDTO.class, new CatResourceConfig(NotificationRecipientDTO.class) {
+            @Override
+            public void initialize() {
+                final String METHODNAME = "NotificationRecipientDTO initialize ";
+                logger.info(METHODNAME);
+                addDataTableColumn("recipientType", "Type");
+                addDataTableColumn("securitySchemeDTO.schemeName", "Group");
+                addDataTableColumn("userDTO", "User");
+            }
+        });
+
+        registerConfig(NotificationLogDTO.class, new CatResourceConfig(NotificationLogDTO.class) {
+            @Override
+            public void initialize() {
+                final String METHODNAME = "NotificationLogDTO initialize ";
+                logger.info(METHODNAME);
+                addDataTableColumn("status");
+                addDataTableColumn("type");
+                addDataTableColumn("lastModDatetime");
+            }
+        });
+
+        registerConfig(NotificationStateDTO.class, new CatResourceConfig(NotificationStateDTO.class) {
+            @Override
+            public void initialize() {
+                final String METHODNAME = "NotificationStateDTO initialize ";
+                logger.info(METHODNAME);
+                addDataTableColumn("messageTitle", "Subject");
+                addDataTableColumn("state", "Status");
+                addDataTableColumn("updateTime", "Message Time");
+            }
+        });
+
+        registerConfig(NotificationReleaseNoteDTO.class, new CatResourceConfig(NotificationReleaseNoteDTO.class) {
+            @Override
+            public void initialize() {
+                final String METHODNAME = "NotificationLogDTO initialize ";
+                logger.info(METHODNAME);
+                addDataTableColumn("title");
+                addDataTableColumn("description");
             }
         });
 
