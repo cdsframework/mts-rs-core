@@ -214,8 +214,10 @@ public class PluginConfigCore extends BasePluginConfig {
             public void initialize() {
                 final String METHODNAME = "NotificationLogDTO initialize ";
                 logger.info(METHODNAME);
-                addDataTableColumn("title");
+                setBaseHeader("Release Note");
+                addDataTableColumn("title", "ID");
                 addDataTableColumn("description");
+                addDataTableColumn("reason");
             }
         });
 
