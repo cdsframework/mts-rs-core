@@ -217,7 +217,7 @@ public class PluginConfigCore extends BasePluginConfig {
                 setBaseHeader("Release Note");
                 addDataTableColumn("title");
                 addDataTableColumn("description");
-                addDataTableColumn("reason");
+                addDataTableColumn("reason", "Reason for Change");
             }
         });
 
