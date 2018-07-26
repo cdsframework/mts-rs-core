@@ -203,6 +203,7 @@ public class PluginConfigCore extends BasePluginConfig {
             public void initialize() {
                 final String METHODNAME = "NotificationStateDTO initialize ";
                 logger.info(METHODNAME);
+                setBaseHeader("message");
                 addDataTableColumn("messageTitle", "Subject");
                 addDataTableColumn("state", "Status");
                 addDataTableColumn("updateTime", "Message Time");
