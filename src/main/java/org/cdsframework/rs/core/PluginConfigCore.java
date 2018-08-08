@@ -194,6 +194,7 @@ public class PluginConfigCore extends BasePluginConfig {
                 logger.info(METHODNAME);
                 addDataTableColumn("status");
                 addDataTableColumn("type");
+                addDataTableColumn("notes");
                 addDataTableColumn("lastModDatetime");
             }
         });
