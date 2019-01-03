@@ -59,7 +59,7 @@ import org.cdsframework.util.LogUtils;
 public class SessionRestService {
 
     private final static LogUtils logger = LogUtils.getLogger(SessionRestService.class);
-    
+
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -69,9 +69,9 @@ public class SessionRestService {
             throws MtsException, AuthenticationException, AuthorizationException {
         return getSession(username, password, applicationName);
     }
-    
+
     @POST
-    @Path("{sessionId}")    
+    @Path("{sessionId}")
     @Produces(MediaType.TEXT_PLAIN)
     public String getProxiedUserSession(@PathParam("sessionId") String sessionId, String userId)
             throws MtsException, AuthenticationException, AuthorizationException, ValidationException, NotFoundException {
@@ -82,17 +82,16 @@ public class SessionRestService {
         SessionDTO sessionDTO = new SessionDTO();
         sessionDTO.setSessionId(sessionId);
 //        sessionDTO = getGeneralMGRClient().findByPrimaryKey(sessionDTO, sessionDTO, new PropertyBagDTO());
-        sessionDTO = getGeneralMGR().findByPrimaryKey(sessionDTO, sessionDTO, new PropertyBagDTO());        
+        sessionDTO = getGeneralMGR().findByPrimaryKey(sessionDTO, sessionDTO, new PropertyBagDTO());
         return getSecurityMGR().getProxiedUserSession(userId, sessionDTO).getSessionId();
 
-    }    
-    
+    }
+
     @DELETE
     @Path("{sessionId}")
     public boolean logout(@PathParam("sessionId") String sessionId)
             throws MtsException, AuthenticationException, AuthorizationException {
         final String METHODNAME = "logout ";
-        logger.logBegin(METHODNAME);
         boolean loggedOut = false;
         try {
             // The call absorbes the NotFoundException so bad sessions will always be successful
@@ -101,12 +100,8 @@ public class SessionRestService {
             getSecurityMGR().logout(sessionDTO);
             loggedOut = true;
         } catch (MtsException | AuthenticationException e) {
-            throw e;
-        } catch (Exception e) {
             logger.error(METHODNAME, "An Unexpected Exception has occurred; Message: " + e.getMessage(), e);
-            throw new MtsException("An Unexpected Exception has occurred; Message: " + e.getMessage(), e);
-        } finally {
-            logger.logEnd(METHODNAME);
+            throw e;
         }
         return loggedOut;
 
@@ -138,23 +133,20 @@ public class SessionRestService {
         sessionDTO.setSessionId(sessionId);
         return getSecurityMGR().getUserSecuritySchemePermissionMaps(sessionDTO);
     }
-    
+
     private SecurityMGRInterface getSecurityMGR() throws MtsException {
         return MtsMGRClient.getSecurityMGR(CoreConfiguration.isMtsUseRemote());
     }
 
     private GeneralMGRInterface getGeneralMGR() throws MtsException {
         return MtsMGRClient.getGeneralMGR(CoreConfiguration.isMtsUseRemote());
-    }      
-    
+    }
+
     private String getSession(String username, String password, String applicationName) throws MtsException, AuthenticationException, AuthorizationException {
         final String METHODNAME = "getSession ";
-        if (logger.isDebugEnabled()) {
-            logger.debug(METHODNAME, "username=", username, " applicationName=", applicationName);
-        }
+        logger.debug(METHODNAME, "username=", username, " applicationName=", applicationName);
 
         String sessionId = null;
-        logger.logBegin(METHODNAME);
         try {
             SessionDTO sessionDTO = getSecurityMGR().login(username, password, applicationName);
             sessionId = sessionDTO.getSessionId();
@@ -162,12 +154,8 @@ public class SessionRestService {
                 logger.debug(METHODNAME + "sessionId=" + sessionId);
             }
         } catch (MtsException | AuthenticationException | AuthorizationException e) {
-            throw e;
-        } catch (Exception e) {
             logger.error(METHODNAME, "An Unexpected Exception has occurred; Message: " + e.getMessage(), e);
-            throw new MtsException("An Unexpected Exception has occurred; Message: " + e.getMessage(), e);
-        } finally {
-            logger.logEnd(METHODNAME);
+            throw e;
         }
         return sessionId;
     }
