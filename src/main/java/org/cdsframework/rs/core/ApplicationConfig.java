@@ -29,9 +29,7 @@ package org.cdsframework.rs.core;
 import javax.ws.rs.ApplicationPath;
 import org.cdsframework.rs.base.BaseResourceConfig;
 import org.cdsframework.rs.provider.CoreJacksonJsonProvider;
-import static org.cdsframework.rs.support.CoreConfiguration.getInstanceProperties;
 import org.cdsframework.rs.support.CoreRsConstants;
-import org.cdsframework.util.StringUtils;
 
 /**
  *

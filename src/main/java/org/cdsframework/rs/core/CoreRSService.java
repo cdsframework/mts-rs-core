@@ -25,8 +25,21 @@
  */
 package org.cdsframework.rs.core;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import org.cdsframework.client.MtsMGRClient;
+import org.cdsframework.exceptions.AuthenticationException;
+import org.cdsframework.exceptions.AuthorizationException;
+import org.cdsframework.exceptions.ConstraintViolationException;
+import org.cdsframework.exceptions.MtsException;
+import org.cdsframework.exceptions.NotFoundException;
+import org.cdsframework.exceptions.ValidationException;
 import org.cdsframework.rs.GeneralRSService;
+import org.cdsframework.rs.support.CoreConfiguration;
 import org.cdsframework.rs.support.CoreRsConstants;
 
 /**
@@ -39,5 +52,31 @@ public class CoreRSService extends GeneralRSService {
     public CoreRSService() {
         super(CoreRSService.class);
     }
-    
+
+    /**
+     *
+     * @param changePasswordForm
+     * @return
+     * @throws AuthenticationException
+     * @throws AuthorizationException
+     * @throws ConstraintViolationException
+     * @throws ValidationException
+     * @throws NotFoundException
+     * @throws MtsException
+     */
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("changepassword")
+    public boolean changePasword(ChangePasswordForm changePasswordForm)
+            throws AuthenticationException, AuthorizationException, ConstraintViolationException, ValidationException, NotFoundException, MtsException {
+        final String METHODNAME = "changePasword ";
+        String userName = changePasswordForm.getUserName();
+        String currentPassword = changePasswordForm.getCurrentPassword();
+        String newPassword = changePasswordForm.getNewPassword();
+        String confirmPassword = changePasswordForm.getConfirmPassword();
+        logger.info(METHODNAME, "userName=", userName);
+        return MtsMGRClient.getSecurityMGR(CoreConfiguration.isMtsUseRemote()).changePassword(userName, currentPassword, newPassword, confirmPassword);
+    }
+
 }
