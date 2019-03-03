@@ -26,6 +26,25 @@ public class ChangePasswordForm {
     private String currentPassword;
     private String newPassword;
     private String confirmPassword;
+    private String passwordToken;
+
+    /**
+     * Get the value of passwordToken
+     *
+     * @return the value of passwordToken
+     */
+    public String getPasswordToken() {
+        return passwordToken;
+    }
+
+    /**
+     * Set the value of passwordToken
+     *
+     * @param passwordToken new value of passwordToken
+     */
+    public void setPasswordToken(String passwordToken) {
+        this.passwordToken = passwordToken;
+    }
 
     /**
      * Get the value of confirmPassword

@@ -26,9 +26,12 @@
 package org.cdsframework.rs.core;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import org.cdsframework.client.MtsMGRClient;
 import org.cdsframework.exceptions.AuthenticationException;
@@ -71,11 +74,33 @@ public class CoreRSService extends GeneralRSService {
             throws AuthenticationException, AuthorizationException, ConstraintViolationException, ValidationException, NotFoundException, MtsException {
         final String METHODNAME = "changePasword ";
         String userName = changePasswordForm.getUserName();
+        String passwordToken = changePasswordForm.getPasswordToken();
         String currentPassword = changePasswordForm.getCurrentPassword();
         String newPassword = changePasswordForm.getNewPassword();
         String confirmPassword = changePasswordForm.getConfirmPassword();
         logger.info(METHODNAME, "userName=", userName);
-        return MtsMGRClient.getSecurityMGR(CoreConfiguration.isMtsUseRemote()).changePassword(userName, currentPassword, newPassword, confirmPassword);
+        return MtsMGRClient.getSecurityMGR(CoreConfiguration.isMtsUseRemote()).changePassword(userName, currentPassword, passwordToken, newPassword, confirmPassword);
+    }
+
+    /**
+     *
+     * @param userName
+     * @return 
+     * @throws AuthenticationException
+     * @throws AuthorizationException
+     * @throws ConstraintViolationException
+     * @throws ValidationException
+     * @throws NotFoundException
+     * @throws MtsException
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("forgotpassword")
+    public boolean forgotPasword(@QueryParam("userName") String userName)
+            throws AuthenticationException, AuthorizationException, ConstraintViolationException, ValidationException, NotFoundException, MtsException {
+        final String METHODNAME = "forgotPasword ";
+        logger.info(METHODNAME, "userName=", userName);
+        return MtsMGRClient.getSecurityMGR(CoreConfiguration.isMtsUseRemote()).forgotPassword(userName);
     }
 
 }
