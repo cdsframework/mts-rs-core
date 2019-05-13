@@ -32,6 +32,7 @@ import org.cdsframework.dto.NotificationDTO;
 import org.cdsframework.dto.NotificationLogDTO;
 import org.cdsframework.dto.NotificationRecipientDTO;
 import org.cdsframework.dto.NotificationReleaseNoteDTO;
+import org.cdsframework.dto.NotificationReleaseNoteFileDTO;
 import org.cdsframework.dto.NotificationStateDTO;
 import org.cdsframework.dto.SecurityPermissionDTO;
 import org.cdsframework.dto.SecuritySchemeDTO;
@@ -214,12 +215,24 @@ public class PluginConfigCore extends BasePluginConfig {
         registerConfig(NotificationReleaseNoteDTO.class, new CatResourceConfig(NotificationReleaseNoteDTO.class) {
             @Override
             public void initialize() {
-                final String METHODNAME = "NotificationLogDTO initialize ";
+                final String METHODNAME = "NotificationReleaseNoteDTO initialize ";
                 logger.info(METHODNAME);
                 setBaseHeader("Release Note");
                 addDataTableColumn("title");
                 addDataTableColumn("description");
                 addDataTableColumn("reason", "Reason for Change");
+                addDataTableColumn("url", "URL");
+            }
+        });
+
+        registerConfig(NotificationReleaseNoteFileDTO.class, new CatResourceConfig(NotificationReleaseNoteFileDTO.class) {
+            @Override
+            public void initialize() {
+                final String METHODNAME = "NotificationReleaseNoteFileDTO initialize ";
+                logger.info(METHODNAME);
+                setBaseHeader("Release Note Reference File");
+                addDataTableColumn("sourceFileName");
+                addDataTableColumn("mimeType");
             }
         });
 

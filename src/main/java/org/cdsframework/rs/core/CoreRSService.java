@@ -25,6 +25,10 @@
  */
 package org.cdsframework.rs.core;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URISyntaxException;
+import javax.naming.NamingException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -33,7 +37,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
 import org.cdsframework.client.MtsMGRClient;
+import org.cdsframework.dto.NotificationReleaseNoteFileDTO;
+import org.cdsframework.dto.PropertyBagDTO;
+import org.cdsframework.dto.SessionDTO;
 import org.cdsframework.exceptions.AuthenticationException;
 import org.cdsframework.exceptions.AuthorizationException;
 import org.cdsframework.exceptions.ConstraintViolationException;
@@ -101,6 +110,44 @@ public class CoreRSService extends GeneralRSService {
         final String METHODNAME = "forgotPasword ";
         logger.info(METHODNAME, "userName=", userName);
         return MtsMGRClient.getSecurityMGR(CoreConfiguration.isMtsUseRemote()).forgotPassword(userName);
+    }
+
+    @GET
+    @Path("notificationreleasenotefiles/download/{fileId}")
+    @Produces({MediaType.APPLICATION_OCTET_STREAM})
+    public Response downloadNotificationReleaseNoteFile(
+            @PathParam("fileId") final String fileId,
+            @QueryParam(CoreRsConstants.QUERYPARMSESSION) String sessionId)
+            throws ValidationException, NotFoundException, MtsException, AuthenticationException, AuthorizationException, ConstraintViolationException,
+            NamingException, URISyntaxException, IOException {
+        final String METHODNAME = "downloadNotificationReleaseNoteFile ";
+        String data = "fileId=" + fileId + "; sessionId=" + sessionId;
+        logger.info(METHODNAME, "data=", data);
+
+        SessionDTO sessionDTO = new SessionDTO();
+        sessionDTO.setSessionId(sessionId);
+
+        Response response;
+        PropertyBagDTO propertyBagDTO = new PropertyBagDTO();
+        propertyBagDTO.setQueryClass("ByteArrayByFileId");
+
+        NotificationReleaseNoteFileDTO notificationReleaseNoteFileDTO = new NotificationReleaseNoteFileDTO();
+        notificationReleaseNoteFileDTO.setFileId(fileId);
+
+        byte[] fileData = getGeneralMGR().findObjectByQuery(notificationReleaseNoteFileDTO, sessionDTO, byte[].class, propertyBagDTO);
+
+        notificationReleaseNoteFileDTO = getGeneralMGR().findByPrimaryKey(notificationReleaseNoteFileDTO, sessionDTO, new PropertyBagDTO());
+
+        StreamingOutput streamingOutput = (OutputStream out) -> {
+            out.write(fileData);
+            out.flush();
+        };
+        Response.ResponseBuilder responseBuilder = Response.ok(streamingOutput);
+        responseBuilder.header("content-disposition", "attachment; filename=" + notificationReleaseNoteFileDTO.getSourceFileName());
+        responseBuilder.header("content-type", notificationReleaseNoteFileDTO.getMimeType());
+        response = responseBuilder.build();
+
+        return response;
     }
 
 }
