@@ -39,13 +39,6 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.cdsframework</groupId>
-            <artifactId>mts-ejb-core</artifactId>
-            <version>2.0.0</version>
-            <type>jar</type>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 
     <build>
