@@ -23,7 +23,6 @@
  * For more information about the this software, see http://www.hln.com/ice or send
  * correspondence to ice@hln.com.
  */
-
 package org.cdsframework.rs.core;
 
 import javax.ws.rs.ApplicationPath;
@@ -40,14 +39,15 @@ public class ApplicationConfig extends BaseResourceConfig {
 
     public ApplicationConfig() {
         super();
-        
+
         CoreJacksonJsonProvider coreJacksonJsonProvider = new CoreJacksonJsonProvider();
         coreJacksonJsonProvider.registerDTOs("org.cdsframework.dto");
+        register(HealthCheckService.class);
         register(coreJacksonJsonProvider);
-        register(CoreRSService.class);         
+        register(CoreRSService.class);
         register(SessionRestService.class);
         register(ConfigServiceCore.class);
         register(ConfigServiceBase.class);
     }
-    
+
 }
